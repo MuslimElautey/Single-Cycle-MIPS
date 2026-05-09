@@ -1,0 +1,4 @@
+This project presents the design and implementation of a 32-bit Single Cycle MIPS Processor using Verilog HDL.
+The processor was developed to execute a subset of MIPS instructions through a complete single-cycle datapath and control architecture.
+The design focuses on RTL implementation, functional verification, simulation analysis, and synthesis flow.
+The processor supports arithmetic, logical, memory access, branching, and jump operations while maintaining single-cycle instruction execution.
