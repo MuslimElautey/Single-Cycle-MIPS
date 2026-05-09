@@ -1,0 +1,27 @@
+module Single_Cycle_MIPS(clk,rst);
+input clk,rst;
+wire MemtoReg,MemWrite,Branch,ALUSrc,RegDst,RegWrite,Jump,Zero,PCSrc;
+wire [2:0]ALUControl;
+wire [31:0]pci0,pci1,pco,pcplus4,Instr,signImm,SrcA,SrcB,ReadData,WriteData,PCbranch,Result;
+wire [4:0]WriteReg;
+wire [31:0]ALUResult;
+wire [5:0]opcode,funct;
+wire [1:0]ALUOp;
+assign PCSrc = Branch & Zero;
+assign opcode = Instr[31:26];
+assign funct = Instr[5:0];
+mux mux1(.i0(pcplus4),.i1(PCbranch),.s(PCSrc),.out(pci0));
+Program_Counter pc(.clk(clk),.rst(rst),.pci(pci1),.pco(pco));
+Instruction_mem im(.clk(clk),.rst(rst),.A(pco),.RD(Instr));
+pcplus4 pp4(.pco(pco),.PCPlus4(pcplus4));
+mux #(.Width(5)) mux2(.i0(Instr[20:16]),.i1(Instr[15:11]),.s(RegDst),.out(WriteReg));
+SignExtend se(.Inst(Instr[15:0]),.SignImm(signImm));
+mux mux3(.i0(WriteData),.i1(signImm),.s(ALUSrc),.out(SrcB));
+PCBranch pcb(.in0(signImm),.in1(pcplus4),.out(PCbranch));
+ALU alu(.SrcA(SrcA),.SrcB(SrcB),.ALUControl(ALUControl),.ALUResult(ALUResult),.Zero(Zero));
+Register_File rf(.clk(clk),.rst(rst),.WE3(RegWrite),.A1(Instr[25:21]),.A2(Instr[20:16]),.A3(WriteReg),.WD3(Result),.RD1(SrcA),.RD2(WriteData));
+Data_Mem dm(.clk(clk),.rst(rst),.WE(MemWrite),.A(ALUResult),.WD(WriteData),.RD(ReadData));
+mux mux4(.i0(ALUResult),.i1(ReadData),.s(MemtoReg),.out(Result));
+Control_Unit cu(.Op(opcode),.Funct(funct),.RegWrite(RegWrite),.RegDst(RegDst),.ALUSrc(ALUSrc),.Branch(Branch),.MemWrite(MemWrite),.MemtoReg(MemtoReg),.ALUOp(ALUOp),.Jump(Jump),.ALUControl(ALUControl));
+mux mux5(.i0(pci0),.i1({pcplus4[31:28],Instr[25:0],2'b00}),.s(Jump),.out(pci1));
+endmodule
