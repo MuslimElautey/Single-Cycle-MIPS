@@ -105,7 +105,7 @@ Waveform analysis was used to verify:
 * Branch and jump functionality
 
 ---
-![Waveform Verification](Wave_Form.png)
+![Waveform Verification](Wave_Form.PNG)
 # Synthesis (Vivado)
 
 The RTL design was synthesized using Vivado to validate hardware feasibility and ensure synthesizable RTL implementation.
