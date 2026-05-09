@@ -25,7 +25,7 @@ The processor architecture includes the following major components:
 * Multiplexers and Control Signals
 
 ## System Architecture Diagram
-
+![MIPS Architecture](Architecture.png)
 ## Supported Instructions
 
 ### R-Type Instructions
@@ -48,7 +48,7 @@ The processor architecture includes the following major components:
 * `j`
 
 ---
-![MIPS Architecture](Architecture.png)
+
 # Tools & Techniques
 
 ## Languages & Tools
